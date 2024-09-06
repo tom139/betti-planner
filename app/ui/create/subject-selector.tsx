@@ -6,10 +6,7 @@ import {
   days,
   TimetableList,
 } from "@/app/lib/timetable";
-import {
-  useSelectedSubjects,
-  useAllSubjects,
-} from "@/app/lib/SubjectsContext";
+import { useSelectedSubjects, useAllSubjects } from "@/app/lib/SubjectsContext";
 import { useEffect, useState } from "react";
 import {
   Cascader,
@@ -21,6 +18,7 @@ import {
   Row,
   Card,
 } from "antd";
+import ClassStats from "../ClassStats";
 
 interface Option {
   value: string;
@@ -96,6 +94,7 @@ function Selector() {
       options={options}
       multiple
       showCheckedStrategy={SHOW_CHILD}
+      style={{ width: "100%" }}
       onChange={(options, _) => {
         const selected = options
           .map((x) => {
@@ -127,23 +126,24 @@ function SubjectList({
     };
   });
   return (
-    <List
-      itemLayout="horizontal"
-      dataSource={ds}
-      renderItem={(x) => (
-        <List.Item>
-          <List.Item.Meta
-            title={`${x.klass} - ${x.name}`}
-            description={x.teacher}
+    <>
+      <Row
+        gutter={[16, 16]}
+        style={{ marginBottom: "16px", marginTop: "16px" }}
+      >
+        <Col span={24}>
+          <ClassStats
+            title="Totale"
+            hours={ds.reduce((acc, x) => acc + x.hours, 0)}
           />
-          <Space />
-          <p>
-            hours:
-            {x.hours}
-          </p>
-        </List.Item>
-      )}
-    />
+        </Col>
+        {ds.map((x) => (
+          <Col span={8} key={`${x.klass}-${x.name}`}>
+            <ClassStats title={`${x.klass} - ${x.name}`} hours={x.hours} />
+          </Col>
+        ))}
+      </Row>
+    </>
   );
 }
 
@@ -277,6 +277,7 @@ function SubjectsCell({
 
   return (
     <Card
+      size="small"
       style={{
         height: "100%",
         backgroundColor: selected.length > 0 ? "#e6f7ff" : "transparent",
