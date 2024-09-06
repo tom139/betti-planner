@@ -6,7 +6,11 @@ import {
   days,
   TimetableList,
 } from "@/app/lib/timetable";
-import { use, useState } from "react";
+import {
+  useSelectedSubjects,
+  useAllSubjects,
+} from "@/app/lib/SubjectsContext";
+import { useEffect, useState } from "react";
 import {
   Cascader,
   List,
@@ -15,7 +19,6 @@ import {
   Col,
   Checkbox,
   Row,
-  Divider,
   Card,
 } from "antd";
 
@@ -31,10 +34,7 @@ export function SubjectSelector({
   timetable: TimetableList;
   subjects: string[];
 }) {
-  const [allSubjects, setAllSubjects] = useState<TimetableList>(timetable);
-  const [subjects, setSubjects] = useState<TimetableList>(
-    new TimetableList([])
-  );
+  const { setAllSubjects } = useAllSubjects();
   const [selectedClasses, setSelectedClasses] = useState<
     {
       klass: string;
@@ -44,11 +44,15 @@ export function SubjectSelector({
     }[]
   >([]);
 
+  useEffect(() => {
+    setAllSubjects(timetable);
+  }, [timetable]);
+
   return (
     <div>
       <h2>Seleziona le tue classi</h2>
-      <Selector timetable={allSubjects} setSubjects={setSubjects} />
-      <SubjectList subjects={subjects} selectedClasses={selectedClasses} />
+      <Selector />
+      <SubjectList selectedClasses={selectedClasses} />
       <Row>
         <Col flex="5%" key="header-hour">
           <b>Ora</b>
@@ -64,7 +68,6 @@ export function SubjectSelector({
       {[1, 2, 3, 4, 5, 6, 7, 8].map((hour) => (
         <TimeRow
           key={`header-${hour}`}
-          subjects={subjects}
           hour={hour}
           selectedClasses={selectedClasses}
           setSelectedClasses={setSelectedClasses}
@@ -74,14 +77,10 @@ export function SubjectSelector({
   );
 }
 
-function Selector({
-  timetable,
-  setSubjects,
-}: {
-  timetable: TimetableList;
-  setSubjects: (subjects: TimetableList) => void;
-}) {
-  const subjectsByClass = timetable.getClassesAndSubjects();
+function Selector() {
+  const { setSelectedSubjects } = useSelectedSubjects();
+  const { allSubjects } = useAllSubjects();
+  const subjectsByClass = allSubjects.getClassesAndSubjects();
   const options = subjectsByClass.map(({ klass, subjects }) => ({
     value: klass,
     label: klass,
@@ -102,23 +101,22 @@ function Selector({
           .map((x) => {
             return { klass: x[0], subject: x[1] };
           })
-          .map((x) => timetable.getSubjectForClassAndSubject(x))
+          .map((x) => allSubjects.getSubjectForClassAndSubject(x))
           .filter((x) => x !== undefined);
 
-        setSubjects(new TimetableList(selected));
+        setSelectedSubjects(new TimetableList(selected));
       }}
     />
   );
 }
 
 function SubjectList({
-  subjects,
   selectedClasses,
 }: {
-  subjects: TimetableList;
   selectedClasses: { klass: string; subject: string; day: Day; hour: number }[];
 }) {
-  const ds = subjects.subjects.map((x) => {
+  const { selectedSubjects } = useSelectedSubjects();
+  const ds = selectedSubjects.subjects.map((x) => {
     return {
       name: x.name,
       teacher: x.teacher,
@@ -192,18 +190,17 @@ const columns: TableProps<SubjectPlan>["columns"] = [
 ];
 
 function TimeRow({
-  subjects,
   hour,
   selectedClasses,
   setSelectedClasses,
 }: {
-  subjects: TimetableList;
   hour: number;
   selectedClasses: { klass: string; subject: string; day: Day; hour: number }[];
   setSelectedClasses: (
     x: { klass: string; subject: string; day: Day; hour: number }[]
   ) => void;
 }) {
+  const { selectedSubjects } = useSelectedSubjects();
   return (
     <>
       <Row>
@@ -212,7 +209,7 @@ function TimeRow({
         </Col>
         {days.map((day) => {
           const ss = new TimetableList(
-            subjects.getSubjectsForDayAndHour({ day, hour })
+            selectedSubjects.getSubjectsForDayAndHour({ day, hour })
           );
           return (
             <Col key={day} flex="18%">

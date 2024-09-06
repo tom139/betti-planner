@@ -3,6 +3,10 @@
 import { getTimeTables } from "@/app/lib/time-fetcher";
 import { TimetableList } from "@/app/lib/timetable";
 import { SubjectSelector } from "@/app/ui/create/subject-selector";
+import {
+  AllSubjectsProvider,
+  SelectedSubjectsProvider,
+} from "./lib/SubjectsContext";
 
 export default function Page() {
   // const [timetable] = useState(getTimeTables());
@@ -11,8 +15,14 @@ export default function Page() {
 
   return (
     <div>
-      <h1>Page</h1>
-      <SubjectSelector timetable={new TimetableList(timetable)} subjects={[]} />
+      <SelectedSubjectsProvider>
+        <AllSubjectsProvider>
+          <SubjectSelector
+            timetable={new TimetableList(timetable)}
+            subjects={[]}
+          />
+        </AllSubjectsProvider>
+      </SelectedSubjectsProvider>
     </div>
   );
 }
