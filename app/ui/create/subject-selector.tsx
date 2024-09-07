@@ -87,18 +87,28 @@ function Selector() {
       label: `${klass} - ${subject}`,
     })),
   }));
+  const optionsByClassYear: Option[] = options.reduce((acc, x) => {
+    const year = x.value.slice(0, 1);
+    if (acc.find((y) => y.label === year) === undefined) {
+      acc.push({ value: year, label: year, children: [x] });
+    } else {
+      acc.find((y) => y.label === year)?.children?.push(x);
+    }
+    return acc;
+  }, [] as Option[]);
   const { SHOW_CHILD } = Cascader;
 
   return (
     <Cascader
-      options={options}
+      options={optionsByClassYear}
       multiple
       showCheckedStrategy={SHOW_CHILD}
       style={{ width: "100%" }}
       onChange={(options, _) => {
+        console.log(options);
         const selected = options
           .map((x) => {
-            return { klass: x[0], subject: x[1] };
+            return { klass: x[1], subject: x[2] };
           })
           .map((x) => allSubjects.getSubjectForClassAndSubject(x))
           .filter((x) => x !== undefined);
