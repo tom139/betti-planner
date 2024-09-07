@@ -6,7 +6,7 @@ import { SubjectTimetable } from "./timetable";
 export function getTimeTables(): SubjectTimetable[] {
   return [
     {
-      name: "Mathematics",
+      name: "Matematica",
       teacher: "Bianchi",
       class: "1AS",
       schedule: {
@@ -18,7 +18,7 @@ export function getTimeTables(): SubjectTimetable[] {
       },
     },
     {
-      name: "Biology",
+      name: "Biologia",
       teacher: "Rossi",
       class: "1AS",
       schedule: {
@@ -30,7 +30,7 @@ export function getTimeTables(): SubjectTimetable[] {
       },
     },
     {
-      name: "Literature",
+      name: "Italiano",
       teacher: "Verdi",
       class: "1BA",
       schedule: {
@@ -42,7 +42,7 @@ export function getTimeTables(): SubjectTimetable[] {
       },
     },
     {
-      name: "Mathematics",
+      name: "Matematica",
       teacher: "Bianchi",
       class: "1BA",
       schedule: {
