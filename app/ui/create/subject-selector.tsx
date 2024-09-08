@@ -1,30 +1,11 @@
 "use client";
 
-import {
-  // SubjectTimetable,
-  Day,
-  days,
-  TimetableList,
-} from "@/app/lib/timetable";
+import { Day, days, TimetableList } from "@/app/lib/timetable";
 import { useSelectedSubjects, useAllSubjects } from "@/app/lib/SubjectsContext";
 import { useEffect, useState } from "react";
-import {
-  Cascader,
-  List,
-  Space,
-  TableProps,
-  Col,
-  Checkbox,
-  Row,
-  Card,
-} from "antd";
-import ClassStats from "../ClassStats";
-
-interface Option {
-  value: string;
-  label: string;
-  children?: Option[];
-}
+import { Col, Checkbox, Row, Card } from "antd";
+import ClassStats from "@/app/ui/ClassStats";
+import { SubjectsSelector } from "@/app/ui/SubjectsSelector";
 
 export function SubjectSelector({
   timetable,
@@ -49,7 +30,7 @@ export function SubjectSelector({
   return (
     <div>
       <h2>Seleziona le tue classi</h2>
-      <Selector />
+      <SubjectsSelector />
       <SubjectList selectedClasses={selectedClasses} />
       <Row>
         <Col flex="5%" key="header-hour">
@@ -72,50 +53,6 @@ export function SubjectSelector({
         />
       ))}
     </div>
-  );
-}
-
-function Selector() {
-  const { setSelectedSubjects } = useSelectedSubjects();
-  const { allSubjects } = useAllSubjects();
-  const subjectsByClass = allSubjects.getClassesAndSubjects();
-  const options = subjectsByClass.map(({ klass, subjects }) => ({
-    value: klass,
-    label: klass,
-    children: subjects.map((subject) => ({
-      value: subject,
-      label: `${klass} - ${subject}`,
-    })),
-  }));
-  const optionsByClassYear: Option[] = options.reduce((acc, x) => {
-    const year = x.value.slice(0, 1);
-    if (acc.find((y) => y.label === year) === undefined) {
-      acc.push({ value: year, label: year, children: [x] });
-    } else {
-      acc.find((y) => y.label === year)?.children?.push(x);
-    }
-    return acc;
-  }, [] as Option[]);
-  const { SHOW_CHILD } = Cascader;
-
-  return (
-    <Cascader
-      options={optionsByClassYear}
-      multiple
-      showCheckedStrategy={SHOW_CHILD}
-      style={{ width: "100%" }}
-      onChange={(options, _) => {
-        console.log(options);
-        const selected = options
-          .map((x) => {
-            return { klass: x[1], subject: x[2] };
-          })
-          .map((x) => allSubjects.getSubjectForClassAndSubject(x))
-          .filter((x) => x !== undefined);
-
-        setSelectedSubjects(new TimetableList(selected));
-      }}
-    />
   );
 }
 
@@ -160,48 +97,6 @@ function SubjectList({
     </>
   );
 }
-
-interface SubjectPlan {
-  hour: number;
-  monday: string[];
-  tuesday: string[];
-  wednesday: string[];
-  thursday: string[];
-  friday: string[];
-}
-
-const columns: TableProps<SubjectPlan>["columns"] = [
-  {
-    title: "Ora",
-    dataIndex: "hour",
-    key: "hour",
-  },
-  {
-    title: "Lunedì",
-    dataIndex: "monday",
-    key: "monday",
-  },
-  {
-    title: "Martedì",
-    dataIndex: "tuesday",
-    key: "tuesday",
-  },
-  {
-    title: "Mercoledì",
-    dataIndex: "wednesday",
-    key: "wednesday",
-  },
-  {
-    title: "Giovedì",
-    dataIndex: "thursday",
-    key: "thursday",
-  },
-  {
-    title: "Venerdì",
-    dataIndex: "friday",
-    key: "friday",
-  },
-];
 
 function TimeRow({
   hour,
