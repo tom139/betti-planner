@@ -147,11 +147,15 @@ function SubjectList({
             hours={ds.reduce((acc, x) => acc + x.hours, 0)}
           />
         </Col>
-        {ds.map((x) => (
-          <Col span={8} key={`${x.klass}-${x.name}`}>
-            <ClassStats title={`${x.klass} - ${x.name}`} hours={x.hours} />
-          </Col>
-        ))}
+        {ds
+          .sort((a, b) =>
+            `${a.klass} ${a.name}` > `${b.klass} ${b.name}` ? 1 : -1
+          )
+          .map((x) => (
+            <Col span={4} key={`${x.klass}-${x.name}`}>
+              <ClassStats title={`${x.klass} - ${x.name}`} hours={x.hours} />
+            </Col>
+          ))}
       </Row>
     </>
   );
