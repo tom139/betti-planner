@@ -1,6 +1,6 @@
 "use client";
 
-import { SubjectHour, TimetableList } from "@/app/lib/timetable";
+import { Lecture, TimetableList } from "@/app/lib/timetable";
 import { useAllSubjects } from "@/app/lib/SubjectsContext";
 import { useEffect, useState } from "react";
 import { ProfSelector } from "@/app/ui/ProfSelector";
@@ -36,7 +36,7 @@ function SubjectSelector({
   subjects: string[];
 }) {
   const { setAllSubjects } = useAllSubjects();
-  const [selectedClasses, setSelectedClasses] = useState<SubjectHour[]>([]);
+  const [selectedLectures, setSelectedLectures] = useState<Lecture[]>([]);
 
   useEffect(() => {
     setAllSubjects(timetable);
@@ -46,10 +46,10 @@ function SubjectSelector({
     <div>
       <h2>Seleziona il docente</h2>
       <ProfSelector />
-      <SubjectsStats selectedClasses={selectedClasses} />
+      <SubjectsStats selectedLectures={selectedLectures} />
       <Timetable
-        selectedClasses={selectedClasses}
-        setSelectedClasses={setSelectedClasses}
+        selectedLectures={selectedLectures}
+        setSelectedLectures={setSelectedLectures}
       />
     </div>
   );

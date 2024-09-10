@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { Card, Col, Row } from "antd";
+import { Card, Col, Flex, Row } from "antd";
 import { useSelectedSubjects } from "../lib/SubjectsContext";
-import { SubjectHour } from "../lib/timetable";
+import { Lecture } from "../lib/timetable";
 
 interface ClassStatsProps {
   title: string;
@@ -21,15 +21,15 @@ const ClassStats: React.FC<ClassStatsProps> = ({ title, hours }) => {
 };
 
 const SubjectsStats: React.FC<{
-  selectedClasses: SubjectHour[];
-}> = ({ selectedClasses }) => {
+  selectedLectures: Lecture[];
+}> = ({ selectedLectures }) => {
   const { selectedSubjects } = useSelectedSubjects();
   const ds = selectedSubjects.subjects.map((x) => {
     return {
       name: x.name,
       teacher: x.teacher,
       klass: x.klass,
-      hours: selectedClasses.filter(
+      hours: selectedLectures.filter(
         (s) => s.subject === x.name && s.klass === x.klass
       ).length,
     };

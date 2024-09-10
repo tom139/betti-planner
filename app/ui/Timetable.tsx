@@ -1,14 +1,21 @@
 import { Row, Col, Card, Checkbox } from "antd";
 import { useSelectedSubjects } from "../lib/SubjectsContext";
-import { Day, days, SubjectHour, TimetableList } from "../lib/timetable";
+import { Day, days, Lecture, TimetableList } from "../lib/timetable";
 
 export default function Timetable({
-  selectedClasses,
-  setSelectedClasses,
+  selectedLectures,
+  setSelectedLectures,
 }: {
-  selectedClasses: SubjectHour[];
-  setSelectedClasses: (x: SubjectHour[]) => void;
+  selectedLectures: Lecture[];
+  setSelectedLectures: (x: Lecture[]) => void;
 }) {
+  const dayMap: { [day in Day]: string } = {
+    monday: "Lunedì",
+    tuesday: "Martedì",
+    wednesday: "Mercoledì",
+    thursday: "Giovedì",
+    friday: "Venerdì",
+  };
   return (
     <>
       <Row>
@@ -18,7 +25,7 @@ export default function Timetable({
         {days.map((day) => {
           return (
             <Col flex="18%" key={`header-${day}`}>
-              <b>{day}</b>
+              <b>{dayMap[day]}</b>
             </Col>
           );
         })}
@@ -27,8 +34,8 @@ export default function Timetable({
         <TimeRow
           key={`header-${hour}`}
           hour={hour}
-          selectedClasses={selectedClasses}
-          setSelectedClasses={setSelectedClasses}
+          selectedLectures={selectedLectures}
+          setSelectedLectures={setSelectedLectures}
         />
       ))}
     </>
@@ -37,12 +44,12 @@ export default function Timetable({
 
 function TimeRow({
   hour,
-  selectedClasses,
-  setSelectedClasses,
+  selectedLectures,
+  setSelectedLectures,
 }: {
   hour: number;
-  selectedClasses: SubjectHour[];
-  setSelectedClasses: (x: SubjectHour[]) => void;
+  selectedLectures: Lecture[];
+  setSelectedLectures: (x: Lecture[]) => void;
 }) {
   const { selectedSubjects } = useSelectedSubjects();
   return (
@@ -58,8 +65,8 @@ function TimeRow({
           return (
             <Col key={day} flex="18%">
               <SubjectsCell
-                selectedClasses={selectedClasses}
-                setSelectedClasses={setSelectedClasses}
+                selectedLectures={selectedLectures}
+                setSelectedLectures={setSelectedLectures}
                 day={day}
                 hour={hour}
                 key={day}
@@ -77,33 +84,33 @@ function SubjectsCell({
   subjects,
   day,
   hour,
-  selectedClasses,
-  setSelectedClasses,
+  selectedLectures,
+  setSelectedLectures,
 }: {
   subjects: TimetableList;
   day: Day;
   hour: number;
-  selectedClasses: SubjectHour[];
-  setSelectedClasses: (x: SubjectHour[]) => void;
+  selectedLectures: Lecture[];
+  setSelectedLectures: (x: Lecture[]) => void;
 }) {
   const options = subjects.subjects.map((x) => ({
     value: `${x.klass} - ${x.name}`,
     label: `${x.klass} - ${x.name}`,
   }));
 
-  const selected = selectedClasses
+  const selected = selectedLectures
     .filter((x) => x.day === day && x.hour === hour)
     .map((x) => `${x.klass} - ${x.subject}`);
 
   const onChange = (value: string[]) => {
-    const otherClasses = selectedClasses.filter(
+    const otherClasses = selectedLectures.filter(
       (x) => x.day !== day || x.hour !== hour
     );
 
     if (value.length === 0) {
-      setSelectedClasses(otherClasses);
+      setSelectedLectures(otherClasses);
     } else {
-      const existingValues = selectedClasses
+      const existingValues = selectedLectures
         .filter((x) => x.day === day && x.hour === hour)
         .map((x) => `${x.klass} - ${x.subject}`);
       const newValue = value.find((x) => !existingValues.includes(x));
@@ -111,7 +118,7 @@ function SubjectsCell({
         return;
       }
       const [newClass, newSubject] = newValue.split(" - ");
-      setSelectedClasses(
+      setSelectedLectures(
         otherClasses.concat({ klass: newClass, subject: newSubject, day, hour })
       );
     }
