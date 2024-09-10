@@ -7,9 +7,10 @@ import { SubjectsSelector } from "@/app/ui/SubjectsSelector";
 import Timetable from "@/app/ui/Timetable";
 import SubjectsStats from "@/app/ui/SubjectStats";
 import { ProfSelector } from "../ProfSelector";
-import { Button, Flex, InputNumber, Segmented, Tooltip } from "antd";
-import { FireOutlined } from "@ant-design/icons";
+import { Button, Flex, InputNumber, Segmented, Space, Tooltip } from "antd";
+import { FireOutlined, DownloadOutlined } from "@ant-design/icons";
 import { randomLectures } from "@/app/lib/lecturesSelector";
+import { exportToCsv } from "@/app/lib/csvExport";
 
 export function SubjectSelector({
   timetable,
@@ -26,7 +27,10 @@ export function SubjectSelector({
 
   return (
     <div>
-      <TopRow setSelectedLectures={setSelectedLectures} />
+      <TopRow
+        selectedLectures={selectedLectures}
+        setSelectedLectures={setSelectedLectures}
+      />
       <SubjectsStats selectedLectures={selectedLectures} />
       <Timetable
         selectedLectures={selectedLectures}
@@ -37,12 +41,14 @@ export function SubjectSelector({
 }
 
 const TopRow = ({
+  selectedLectures,
   setSelectedLectures,
 }: {
+  selectedLectures: Lecture[];
   setSelectedLectures: (x: Lecture[]) => void;
 }) => {
   const { selectedSubjects } = useSelectedSubjects();
-  const [selectProf, setSelectProf] = useState<boolean>(true);
+  const [selectedProf, setSelectedProf] = useState<string | undefined>("");
   const [targetHours, setTargetHours] = useState<number>(18);
 
   const assignSubjects = () => {
@@ -51,17 +57,49 @@ const TopRow = ({
     );
   };
 
+  const downloadLectures = () => {
+    const csvData = exportToCsv({
+      lectures: selectedLectures,
+      prof: selectedProf,
+    });
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      csvData.map((e) => e.join(",")).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    window.open(encodedUri);
+  };
+
   return (
     <>
-      <Segmented
-        options={["Docente", "Classi"]}
-        onChange={(value) => {
-          setSelectProf(value == "Docente");
-          setSelectedLectures([]);
-        }}
-      />
+      <Flex justify="space-between">
+        <Segmented
+          options={["Docente", "Classi"]}
+          onChange={(value) => {
+            setSelectedProf(value == "Docente" ? "" : undefined);
+            setSelectedLectures([]);
+          }}
+        />
+        <Space />
+        <Tooltip title="Scarica l'orario in formato CSV">
+          <Button
+            type="default"
+            icon={<DownloadOutlined />}
+            onClick={downloadLectures}
+            disabled={selectedLectures.length == 0}
+          >
+            Scarica Orario
+          </Button>
+        </Tooltip>
+      </Flex>
       <Flex gap="small" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-        {selectProf ? <ProfSelector /> : <SubjectsSelector />}
+        {selectedProf === undefined ? (
+          <SubjectsSelector />
+        ) : (
+          <ProfSelector
+            selectedProf={selectedProf}
+            setSelectedProf={setSelectedProf}
+          />
+        )}
         <Tooltip title="Ore totali da assegnare">
           <InputNumber
             min={1}

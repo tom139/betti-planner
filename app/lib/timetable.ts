@@ -116,3 +116,11 @@ export interface Professor {
   name: string;
   subjects: ClassSubject[];
 }
+
+export const dayTrn: { [day in Day]: string } = {
+  monday: "Lunedì",
+  tuesday: "Martedì",
+  wednesday: "Mercoledì",
+  thursday: "Giovedì",
+  friday: "Venerdì",
+};

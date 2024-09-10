@@ -1,6 +1,6 @@
 import { Row, Col, Card, Checkbox } from "antd";
-import { useSelectedSubjects } from "../lib/SubjectsContext";
-import { Day, days, Lecture, TimetableList } from "../lib/timetable";
+import { useSelectedSubjects } from "@/app/lib/SubjectsContext";
+import { Day, days, dayTrn, Lecture, TimetableList } from "@/app/lib/timetable";
 
 export default function Timetable({
   selectedLectures,
@@ -9,13 +9,6 @@ export default function Timetable({
   selectedLectures: Lecture[];
   setSelectedLectures: (x: Lecture[]) => void;
 }) {
-  const dayMap: { [day in Day]: string } = {
-    monday: "Lunedì",
-    tuesday: "Martedì",
-    wednesday: "Mercoledì",
-    thursday: "Giovedì",
-    friday: "Venerdì",
-  };
   return (
     <>
       <Row>
@@ -25,7 +18,7 @@ export default function Timetable({
         {days.map((day) => {
           return (
             <Col flex="18%" key={`header-${day}`}>
-              <b>{dayMap[day]}</b>
+              <b>{dayTrn[day]}</b>
             </Col>
           );
         })}

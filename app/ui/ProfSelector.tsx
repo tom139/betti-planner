@@ -9,7 +9,13 @@ interface Option {
   children?: Option[];
 }
 
-export function ProfSelector() {
+export function ProfSelector({
+  selectedProf,
+  setSelectedProf,
+}: {
+  selectedProf: string | undefined;
+  setSelectedProf: (prof: string | undefined) => void;
+}) {
   const { setSelectedSubjects } = useSelectedSubjects();
   const { allSubjects } = useAllSubjects();
   const options: Option[] = professors.map((prof) => ({
@@ -20,9 +26,15 @@ export function ProfSelector() {
   return (
     <Cascader
       options={options}
+      value={selectedProf ? [selectedProf] : undefined}
       style={{ width: "100%" }}
       placeholder="Seleziona il docente"
       onChange={(option) => {
+        if (option.length == 0) {
+          setSelectedProf(undefined);
+        } else {
+          setSelectedProf(option[0]);
+        }
         const profSubjects =
           professors.find((prof) => prof.name == option[0])?.subjects ?? [];
         const selectedSubjects = profSubjects.flatMap(
