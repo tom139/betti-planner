@@ -1,17 +1,27 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Each push to main will automatically deploy the app on Vercel at https://betti-planner.vercel.app/ :rocket:
+
+## Update the data
+
+#### Timetable
+
+The timetable is in `app/lib/orario.ts`.
+
+- You need to ensure the columns are `class, monday_1, monday_2, ...` etc.
+- There must not be any duplicated classes in the timetable.
+- There must not be any merged cell in the original file. They should be separate cells with replicated values.
+
+#### Professors
+
+The professors are in `app/lib/prof.ts`.
+
+- Make sure the class name is the same as in the timetable.
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
