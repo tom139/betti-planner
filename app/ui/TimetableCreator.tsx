@@ -6,13 +6,13 @@ import { useEffect, useState } from "react";
 import { SubjectsSelector } from "@/app/ui/SubjectsSelector";
 import Timetable from "@/app/ui/Timetable";
 import SubjectsStats from "@/app/ui/SubjectStats";
-import { ProfSelector } from "../ProfSelector";
+import { ProfSelector } from "./ProfSelector";
 import { Button, Flex, InputNumber, Segmented, Space, Tooltip } from "antd";
 import { FireOutlined, DownloadOutlined } from "@ant-design/icons";
 import { randomLectures } from "@/app/lib/lecturesSelector";
 import { exportToCsv } from "@/app/lib/csvExport";
 
-export function SubjectSelector({
+export function TimetableCreator({
   timetable,
 }: {
   timetable: TimetableList;

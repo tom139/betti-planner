@@ -2,7 +2,7 @@
 
 import { getTimeTables } from "@/app/lib/time-fetcher";
 import { TimetableList } from "@/app/lib/timetable";
-import { SubjectSelector } from "@/app/ui/create/subject-selector";
+import { TimetableCreator } from "@/app/ui/TimetableCreator";
 import {
   AllSubjectsProvider,
   SelectedSubjectsProvider,
@@ -15,7 +15,7 @@ export default function Page() {
     <div>
       <SelectedSubjectsProvider>
         <AllSubjectsProvider>
-          <SubjectSelector
+          <TimetableCreator
             timetable={new TimetableList(timetable)}
             subjects={[]}
           />
