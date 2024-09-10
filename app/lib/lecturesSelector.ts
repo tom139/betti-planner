@@ -8,6 +8,9 @@ export function randomLectures(
 ): Lecture[] {
   const { targetHours } = options;
   let availableLectures = timetableToLectures(timetable);
+  if (availableLectures.length === 0) {
+    return [];
+  }
 
   const subjects = Array.from(
     new Set(

@@ -18,14 +18,32 @@ export function SubjectSelector({
   subjects: string[];
 }) {
   const { setAllSubjects } = useAllSubjects();
-  const { selectedSubjects } = useSelectedSubjects();
   const [selectedLectures, setSelectedLectures] = useState<Lecture[]>([]);
-  const [selectProf, setSelectProf] = useState<boolean>(true);
-  const [targetHours, setTargetHours] = useState<number>(18);
 
   useEffect(() => {
     setAllSubjects(timetable);
   }, [timetable]);
+
+  return (
+    <div>
+      <TopRow setSelectedLectures={setSelectedLectures} />
+      <SubjectsStats selectedLectures={selectedLectures} />
+      <Timetable
+        selectedLectures={selectedLectures}
+        setSelectedLectures={setSelectedLectures}
+      />
+    </div>
+  );
+}
+
+const TopRow = ({
+  setSelectedLectures,
+}: {
+  setSelectedLectures: (x: Lecture[]) => void;
+}) => {
+  const { selectedSubjects } = useSelectedSubjects();
+  const [selectProf, setSelectProf] = useState<boolean>(true);
+  const [targetHours, setTargetHours] = useState<number>(18);
 
   const assignSubjects = () => {
     setSelectedLectures(
@@ -34,12 +52,12 @@ export function SubjectSelector({
   };
 
   return (
-    <div>
+    <>
       <Segmented
         options={["Docente", "Classi"]}
         onChange={(value) => {
           setSelectProf(value == "Docente");
-          assignSubjects();
+          setSelectedLectures([]);
         }}
       />
       <Flex gap="small" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
@@ -63,11 +81,6 @@ export function SubjectSelector({
           </Button>
         </Tooltip>
       </Flex>
-      <SubjectsStats selectedLectures={selectedLectures} />
-      <Timetable
-        selectedLectures={selectedLectures}
-        setSelectedLectures={setSelectedLectures}
-      />
-    </div>
+    </>
   );
-}
+};
