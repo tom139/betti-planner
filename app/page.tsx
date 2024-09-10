@@ -9,8 +9,6 @@ import {
 } from "./lib/SubjectsContext";
 
 export default function Page() {
-  // const [timetable] = useState(getTimeTables());
-  // const [subjects, setSubjects] = useState([]);
   const timetable = getTimeTables();
 
   return (

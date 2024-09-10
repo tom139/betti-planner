@@ -6,8 +6,30 @@ import { useEffect, useState } from "react";
 import { SubjectsSelector } from "@/app/ui/SubjectsSelector";
 import Timetable from "@/app/ui/Timetable";
 import SubjectsStats from "@/app/ui/SubjectStats";
+import {
+  AllSubjectsProvider,
+  SelectedSubjectsProvider,
+} from "./lib/SubjectsContext";
+import { getTimeTables } from "@/app/lib/time-fetcher";
 
-export function SubjectSelector({
+export default function Page() {
+  const timetable = getTimeTables();
+
+  return (
+    <div>
+      <SelectedSubjectsProvider>
+        <AllSubjectsProvider>
+          <SubjectSelector
+            timetable={new TimetableList(timetable)}
+            subjects={[]}
+          />
+        </AllSubjectsProvider>
+      </SelectedSubjectsProvider>
+    </div>
+  );
+}
+
+function SubjectSelector({
   timetable,
 }: {
   timetable: TimetableList;

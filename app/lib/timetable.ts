@@ -10,7 +10,7 @@ export const days: Day[] = [
 export interface SubjectTimetable {
   name: string;
   teacher: string;
-  class: string;
+  klass: string;
   schedule: { [day in Day]: number[] };
 }
 
@@ -51,9 +51,9 @@ export class TimetableList {
   getClassesAndSubjects(): { klass: string; subjects: string[] }[] {
     return this.subjects
       .reduce((acc, x) => {
-        const index = acc.findIndex((y) => y.klass === x.class);
+        const index = acc.findIndex((y) => y.klass === x.klass);
         if (index === -1) {
-          acc.push({ klass: x.class, subjects: [x.name] });
+          acc.push({ klass: x.klass, subjects: [x.name] });
         } else {
           acc[index].subjects.push(x.name);
         }
@@ -74,7 +74,7 @@ export class TimetableList {
     klass: string;
     subject: string;
   }): SubjectTimetable | undefined {
-    return this.subjects.find((x) => x.class === klass && x.name === subject);
+    return this.subjects.find((x) => x.klass === klass && x.name === subject);
   }
 
   filter(x: { klass: string; subject: string }[]): TimetableList {
@@ -98,4 +98,16 @@ export class TimetableList {
   }): number {
     return this.filter([{ klass, subject }]).subjects.length;
   }
+}
+
+export interface ClassHour {
+  klass: string;
+  subject: string;
+  day: Day;
+  hour: number;
+}
+
+export interface ClassSubject {
+  klass: string;
+  subject: string;
 }
