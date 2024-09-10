@@ -100,7 +100,7 @@ export class TimetableList {
   }
 }
 
-export interface ClassHour {
+export interface SubjectHour {
   klass: string;
   subject: string;
   day: Day;
@@ -110,4 +110,9 @@ export interface ClassHour {
 export interface ClassSubject {
   klass: string;
   subject: string;
+}
+
+export interface Professor {
+  name: string;
+  subjects: ClassSubject[];
 }

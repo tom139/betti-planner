@@ -1,15 +1,13 @@
 import { Row, Col, Card, Checkbox } from "antd";
 import { useSelectedSubjects } from "../lib/SubjectsContext";
-import { Day, days, TimetableList } from "../lib/timetable";
+import { Day, days, SubjectHour, TimetableList } from "../lib/timetable";
 
 export default function Timetable({
   selectedClasses,
   setSelectedClasses,
 }: {
-  selectedClasses: { klass: string; subject: string; day: Day; hour: number }[];
-  setSelectedClasses: (
-    x: { klass: string; subject: string; day: Day; hour: number }[]
-  ) => void;
+  selectedClasses: SubjectHour[];
+  setSelectedClasses: (x: SubjectHour[]) => void;
 }) {
   return (
     <>
@@ -43,10 +41,8 @@ function TimeRow({
   setSelectedClasses,
 }: {
   hour: number;
-  selectedClasses: { klass: string; subject: string; day: Day; hour: number }[];
-  setSelectedClasses: (
-    x: { klass: string; subject: string; day: Day; hour: number }[]
-  ) => void;
+  selectedClasses: SubjectHour[];
+  setSelectedClasses: (x: SubjectHour[]) => void;
 }) {
   const { selectedSubjects } = useSelectedSubjects();
   return (
@@ -87,10 +83,8 @@ function SubjectsCell({
   subjects: TimetableList;
   day: Day;
   hour: number;
-  selectedClasses: { klass: string; subject: string; day: Day; hour: number }[];
-  setSelectedClasses: (
-    x: { klass: string; subject: string; day: Day; hour: number }[]
-  ) => void;
+  selectedClasses: SubjectHour[];
+  setSelectedClasses: (x: SubjectHour[]) => void;
 }) {
   const options = subjects.subjects.map((x) => ({
     value: `${x.klass} - ${x.name}`,

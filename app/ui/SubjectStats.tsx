@@ -3,7 +3,7 @@
 import React from "react";
 import { Card, Col, Row } from "antd";
 import { useSelectedSubjects } from "../lib/SubjectsContext";
-import { Day } from "../lib/timetable";
+import { SubjectHour } from "../lib/timetable";
 
 interface ClassStatsProps {
   title: string;
@@ -21,7 +21,7 @@ const ClassStats: React.FC<ClassStatsProps> = ({ title, hours }) => {
 };
 
 const SubjectsStats: React.FC<{
-  selectedClasses: { klass: string; subject: string; day: Day; hour: number }[];
+  selectedClasses: SubjectHour[];
 }> = ({ selectedClasses }) => {
   const { selectedSubjects } = useSelectedSubjects();
   const ds = selectedSubjects.subjects.map((x) => {

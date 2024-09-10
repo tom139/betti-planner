@@ -15,6 +15,9 @@ export function getTimeTablesFromCSV(csvContent: string): SubjectTimetable[] {
 
   for (const record of records) {
     const className = record["class"];
+    if (!className || className == "") {
+      continue;
+    }
 
     for (let day = 0; day < 5; day++) {
       for (let hour = 1; hour <= 8; hour++) {

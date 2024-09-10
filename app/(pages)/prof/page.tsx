@@ -1,15 +1,15 @@
 "use client";
 
-import { ClassHour, TimetableList } from "@/app/lib/timetable";
+import { SubjectHour, TimetableList } from "@/app/lib/timetable";
 import { useAllSubjects } from "@/app/lib/SubjectsContext";
 import { useEffect, useState } from "react";
-import { SubjectsSelector } from "@/app/ui/SubjectsSelector";
+import { ProfSelector } from "@/app/ui/ProfSelector";
 import Timetable from "@/app/ui/Timetable";
 import SubjectsStats from "@/app/ui/SubjectStats";
 import {
   AllSubjectsProvider,
   SelectedSubjectsProvider,
-} from "./lib/SubjectsContext";
+} from "@/app/lib/SubjectsContext";
 import { getTimeTables } from "@/app/lib/time-fetcher";
 
 export default function Page() {
@@ -36,7 +36,7 @@ function SubjectSelector({
   subjects: string[];
 }) {
   const { setAllSubjects } = useAllSubjects();
-  const [selectedClasses, setSelectedClasses] = useState<ClassHour[]>([]);
+  const [selectedClasses, setSelectedClasses] = useState<SubjectHour[]>([]);
 
   useEffect(() => {
     setAllSubjects(timetable);
@@ -44,8 +44,8 @@ function SubjectSelector({
 
   return (
     <div>
-      <h2>Seleziona le tue classi</h2>
-      <SubjectsSelector />
+      <h2>Seleziona il docente</h2>
+      <ProfSelector />
       <SubjectsStats selectedClasses={selectedClasses} />
       <Timetable
         selectedClasses={selectedClasses}

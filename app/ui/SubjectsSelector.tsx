@@ -35,6 +35,7 @@ export function SubjectsSelector() {
     <Cascader
       options={optionsByClassYear}
       multiple
+      placeholder="Seleziona le classi"
       showCheckedStrategy={SHOW_CHILD}
       style={{ width: "100%" }}
       onChange={(options, _) => {
