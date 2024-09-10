@@ -32,6 +32,7 @@ export function SubjectSelector({
       <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
         {selectProf ? <ProfSelector /> : <SubjectsSelector />}
       </div>
+      <SubjectsStats selectedClasses={selectedClasses} />
       <Timetable
         selectedClasses={selectedClasses}
         setSelectedClasses={setSelectedClasses}
