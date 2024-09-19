@@ -10,7 +10,7 @@ export function getTimeTables(): SubjectTimetable[] {
 }
 
 export function getTimeTablesFromCSV(csvContent: string): SubjectTimetable[] {
-  const records = parse(csvContent, { columns: true, skip_empty_lines: true });
+  const records = parse(csvContent, { columns: true, skip_empty_lines: true, delimiter: ";" });
   const timetables: SubjectTimetable[] = [];
 
   for (const record of records) {
